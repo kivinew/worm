@@ -1,11 +1,11 @@
 ﻿///    "Червяк". По экрану движется червяк, направление движения головы которого
 ///    можно менять (стрелками). Червяк ест призы и растет. Задача - при движении
 ///    головы не наткнуться на хвост и границы экрана.
-#include <iostream>
 #include <time.h>
 #include <conio.h>
 #include <windows.h>
 #include "prize.h"
+#include "worm.h"
 
 #define ESC                 27
 #define ENTER               13
@@ -204,12 +204,12 @@ int wormBuilt   ( int wormArray [] [2] , int *lenght , int dX , int dY )        
 
 void worm       ( int wormArray [] [2] , int *lenght , int wormColor )          // вывод червя
 {
-    int i ;
+ /*   int i ;
     for ( i = 0 ; i < *lenght - 1 ; i++ )
-    {
+    */{/*
         int x , y ;
         x = wormArray [i] [0] ;
-        y = wormArray [i] [1] ;
+        y = wormArray [i] [1] ;*/
         gotoXY ( x , y , wormColor - 8 ) ;
         printf ( "%c", 32 ) ;
     }

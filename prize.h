@@ -8,10 +8,12 @@ class prize
     int             color;
     bool            state;
     int static      count;
+    time_t          lifeTime;
 public:
 
-    prize(): x(0), y(0), color(14)
+    prize(): x(0), y(0), color(14), lifeTime(GetTickCount())
     {
+        srand((unsigned int)time(NULL));                            // -------------------------------------
     }
 
     ~prize()
@@ -20,27 +22,31 @@ public:
 
     int getX()
     {
+        x = rand()%78+1;
         return x;
     }
 
     int getY()
     {
+        y = rand()%23+1;
         return y;
     }
 
     char getFace()
     {
+        face = ' ';
         return face;
     }
 
     int getColor()
     {
+        color = rand()%7+8;
         return color;
     }
     
     void setState()
     {
-        if (count>10)
+        if (GetTickCount()-lifeTime>1000)
             state = 0;
         else
             state = 1;
@@ -50,17 +56,4 @@ public:
     {
         return state;
     }
-
-    //void newPrize()                                                             // сгенерировать случайные координаты
-    //{
-    //    prize box;
-    //    srand((unsigned int)time(NULL));
-    //    rand();                                                                 // для сбивания первого неслучайного значения
-    //    x = rand()%78+1;                                                        // координаты Х....
-    //    y = rand()%23+1;                                                        // и Y.
-    //    face = ' ';                                                             // это символ которым обозначен на поле приз
-    //    wormColor = getColor();
-    //    color = rand()%7+8;
-    //    return;
-    //}
 };

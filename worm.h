@@ -1,11 +1,14 @@
 #pragma once
+#include <iostream>
+using namespace std;
+
 class worm
 {
     int lenght;
-    int *ip_array = new int[lenght];            // указатель на динамический массив
-    int direction;                              // направление движения
+    int **ip_array = new int*[2];                       // указатель на динамический массив
+    int direction;                                      // направление движения
 public:
-    int* getArray()
+    int** getArray()
     {
         return ip_array;
     }
@@ -28,6 +31,17 @@ public:
     void setDirection(int dir)
     {
         direction = dir;
+    }
+
+    void showWorm()
+    {
+        for (int i = 0; i<lenght-1; i++)
+        {
+            int x, y;
+            x = ip_array[i][0];
+            y = ip_array[i][0];
+
+        }
     }
 
     worm():lenght(3),direction(1)
