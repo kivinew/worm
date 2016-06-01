@@ -1,10 +1,12 @@
 ﻿///    "Червяк". По экрану движется червяк, направление движения головы которого
 ///    можно менять (стрелками). Червяк ест призы и растет. Задача - при движении
 ///    головы не наткнуться на хвост и границы экрана.
-#include <stdio.h>
+#include <iostream>
 #include <time.h>
 #include <conio.h>
 #include <windows.h>
+#include "prize.h"
+
 #define ESC                 27
 #define ENTER               13
 #define LEFT                75
@@ -17,11 +19,13 @@
 #define EXIT_SUCCESS        0                                                   // код нормального выхода
 #define EXIT_DEBUG_EVENT    5                                                   // отладочный код выхода
 
+using namespace std;
+
 void newGame    ( );                                                            // новая игра
-void newPrize   ( );                                                            // вывод приза
 int  crawling   ( int [] [2] , int* , int , int );                              // управление процессом игры
 int  wormBuilt  ( int [] [2] , int* , int , int );
 void worm       ( int [] [2] , int* , int       );
+void newBox     ( prize                         );
 void gotoXY     ( int        , int  , int       );
 
 enum Color {                                                                    // перечисление цветов вывода в консоль
@@ -43,14 +47,7 @@ enum Color {                                                                    
     White = 15
 };
 
-//struct PRIZE
-//{
-//    int             x;
-//    int             y;
-//    char            face;
-//    unsigned int    color;
-//    int             wormColor;
-//} prize[10];
+prize box[10];
 
 int main        ( )
 {
@@ -69,8 +66,10 @@ void newGame    ( )                                                             
         system ( "cls" ) ;
         int lenght = MAX_SIZE - 41 ;                                            // длина червя
         int wormArray [ MAX_SIZE ] [ 2 ] = { 40 , 12 } ;                        // начальные координаты червя
-        prize[0] . color = LightGreen ;                                            // начальный цвет червя
-        newPrize ( ) ;
+        for (int i = 0; i<10; i++)
+        {
+            newBox(box[i]);
+        }
         int dX, dY ;
         dY = 0 ;
         dX = rand ( ) % 3 - 1 ;
@@ -80,28 +79,6 @@ void newGame    ( )                                                             
                                                                                 // тела червя, длина червя и сдвиги по осям Х и У.
         if ( quiteCode == EXIT_SUCCESS ) return ;                               // выход из игры
     } while ( quiteCode == RESTART_CODE ) ;                                     // циклический вызов новой игры
-    return ;
-}
-
-void newPrize   ( )                                                             // сгенерировать случайные координаты
-{
-    srand((unsigned int)time(NULL));
-    for (int i = 0; i<10; i++)
-    {
-        rand();                                                                  // для сбивания первого неслучайного значения
-        int x, y, face, color;
-        x = rand()%78+1;                                                     // координаты Х....
-        y = rand()%23+1;                                                     // и Y.
-        face = ' ';                                                                // это символ которым обозначен на поле приз
-        color = rand()%7+8;
-        prize[i].wormColor = prize[i].color;
-        prize[i].color = color;
-        prize[i].x = x;                                                             // присвоить свойства приза ...
-        prize[i].y = y;                                                             // ... полям структуры prize
-        prize[i].face = face;
-        gotoXY(x, y, color);                                                  // ... а тут эти свойства ...
-        printf("%c", face);                                                    // ... используются для вывода приза
-    }
     return ;
 }
 
@@ -191,27 +168,26 @@ int wormBuilt   ( int wormArray [] [2] , int *lenght , int dX , int dY )        
         return CONTINUE_CODE ;                                                  // ... то движемся дальше
     }
 
-    for (int j = 0; j<10; j++) 
+    for (int i = 0; i<10; i++) 
     {
-        if (tmpX==prize[j].x)                                                    // проверка координат головы
-        {                                                                           // на совпадение с координатами фруктов
-            if (tmpY==prize[j].y)                                                //
-            {                                                                       //
-                ++ *lenght;                                                        //
-                worm(wormArray, lenght, prize[j].color+8);                    //
-                Sleep(20);                                                     //
+        if (tmpX==box[i].getX())                                                // проверка координат головы
+        {                                                                       // на совпадение с координатами фруктов
+            if (tmpY==box[i].getY())                                            //
+            {                                                                   //
+                ++ *lenght;                                                     //
+                worm(wormArray, lenght, box[i].getColor()+8);                   //
+                Sleep(20);                                                      //
                 if (*lenght>MAX_SIZE)                                           // увеличиваем длину червя и проверяем
-                {                                                                   // её на превышение максимума.
-                    return RESTART_CODE;                                            // если длина максимальна, перезапускаем игру ...
-                }                                                                   //
-                for (int i = 0; i<10; i++)
+                {                                                               // её на превышение максимума.
+                    return RESTART_CODE;                                        // если длина максимальна, перезапускаем игру ...
+                }                                                               //
+                /*for (int i = 0; i<10; i++)
                 {
-                    int x = prize[i].x;
-                    int y = prize[i].y;
+                    int x = box[i].getX();
+                    int y = box[i].getY();
                     gotoXY(x, y, White);
                     printf(" ");
-                }
-                newPrize();                                                       // создаем новый приз
+                }*/
             }
         }
     }
@@ -222,7 +198,7 @@ int wormBuilt   ( int wormArray [] [2] , int *lenght , int dX , int dY )        
     }                                                                           /*                                                  */
     wormArray [0] [0] = tmpX ;                                                  /* восстанавливаем координаты головы                */
     wormArray [0] [1] = tmpY ;                                                  /*                                                  */
-    worm ( wormArray , lenght , prize[0] . wormColor ) ;                           /* вывод тела червя цветом найденного приза         */
+    worm ( wormArray , lenght , box[0] . getWormColor() ) ;                     /* вывод тела червя цветом найденного приза         */
     return CONTINUE_CODE;
 }
 
@@ -243,6 +219,12 @@ void worm       ( int wormArray [] [2] , int *lenght , int wormColor )          
     gotoXY ( tailX , tailY , White ) ;
     printf ( "%c" , 32 );
     return ;
+}
+
+void newBox(prize box)
+{
+    gotoXY(box.getX(), box.getY(),box.getColor());
+    cout<<box.getFace();
 }
 
 void gotoXY     ( int x , int y , int back )                                    // перевод курсора в положение X,Y
