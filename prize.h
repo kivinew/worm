@@ -7,6 +7,7 @@ class prize
     char            face;
     int             color;
     bool            state;
+    int static      count;
 public:
 
     prize(): x(0), y(0), color(14)
@@ -39,7 +40,10 @@ public:
     
     void setState()
     {
-
+        if (count>10)
+            state = 0;
+        else
+            state = 1;
     }
 
     int getState()
