@@ -24,7 +24,7 @@ using namespace std;
 void newGame    ( );                                                            // новая игра
 int  crawling   ( int [] [2] , int* , int , int );                              // управление процессом игры
 int  wormBuilt  ( int [] [2] , int* , int , int );
-void worm       ( int [] [2] , int* , int       );
+void Worm       ( int [] [2] , int* , int       );
 void newBox     ( prize                         );
 void gotoXY     ( int        , int  , int       );
 
@@ -202,18 +202,11 @@ int wormBuilt   ( int wormArray [] [2] , int *lenght , int dX , int dY )        
     return CONTINUE_CODE;
 }
 
-void worm       ( int wormArray [] [2] , int *lenght , int wormColor )          // вывод червя
+void Worm       ( int wormArray [] [2] , int *lenght , int wormColor )          // вывод червя
 {
- /*   int i ;
-    for ( i = 0 ; i < *lenght - 1 ; i++ )
-    */{/*
-        int x , y ;
-        x = wormArray [i] [0] ;
-        y = wormArray [i] [1] ;*/
-        gotoXY ( x , y , wormColor - 8 ) ;
-        printf ( "%c", 32 ) ;
-    }
+    worm& ptr = worm::getWorm();
     int tailX , tailY;                                                          // хвостовой элемент, затирающий след
+    int i;
     tailX = wormArray [i] [0] ;
     tailY = wormArray [i] [1] ;
     gotoXY ( tailX , tailY , White ) ;

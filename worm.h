@@ -5,12 +5,14 @@ using namespace std;
 class worm
 {
     int lenght;
-    int **ip_array = new int*[2];                       // указатель на динамический массив
-    int direction;                                      // направление движения
+    static int **ip_worm;                              // указатель на динамический массив
+    int direction;                                              // направление движения
+
 public:
-    int** getArray()
+    static worm& getWorm()
     {
-        return ip_array;
+        static worm object;
+        return object;
     }
     
     int getLenght()
@@ -33,24 +35,25 @@ public:
         direction = dir;
     }
 
-    void showWorm()
+    void show()
     {
         for (int i = 0; i<lenght-1; i++)
         {
             int x, y;
-            x = ip_array[i][0];
-            y = ip_array[i][0];
-
+            x = ip_worm[i][0];
+            y = ip_worm[i][1];
+                                                    /// ----------------------?-------------------------------
         }
     }
 
+private: 
     worm():lenght(3),direction(1)
-    {
-    }
-
+    {    }
+         
     ~worm()
-    {
-    }
+         {    }
 
+    worm(const worm&) = delete;
+    worm& operator=(const worm&) = delete;
 };
 
