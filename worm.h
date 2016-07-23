@@ -5,8 +5,8 @@ using namespace std;
 class worm
 {
     int lenght;
-    static int **ip_worm;                                               // указатель на динамический массив
-    int direction;                                               // направление движения
+    static int **ip_worm;                                                   // указатель на динамический массив
+    int direction;                                                          // направление движения
 
 public:
     static worm& getWorm()
@@ -14,7 +14,7 @@ public:
         static worm object;
         return object;
     }
-    
+
     int getLenght()
     {
         return lenght;
@@ -22,7 +22,7 @@ public:
 
     void increase()
     {
-        if (lenght<40)
+        if (lenght < 40)
             lenght++;
         else
             lenght = 3;
@@ -30,7 +30,7 @@ public:
 
     void decrease()
     {
-        if (lenght>3)
+        if (lenght > 3)
             lenght--;
         else
             exit(0);
@@ -48,32 +48,32 @@ public:
 
     void shift()
     {
-        for (int i = lenght-1; i > 0; i--)                                      /* сдвигаем элементы червя на один вправо           */
+        for (int i = lenght - 1; i > 0; i--)                                    /* сдвигаем элементы массива на один вправо         */
         {                                                                       /*                                                  */
-            ip_worm[i][0] = ip_worm[i-1][0];                                    /*                                                  */
-            ip_worm[i][1] = ip_worm[i-1][1];                                    /*                                                  */
+            ip_worm[i][0] = ip_worm[i - 1][0];                                  /*                                                  */
+            ip_worm[i][1] = ip_worm[i - 1][1];                                  /*                                                  */
         }
     }
 
-    void show( int color)                                                                         // вывод червя
+    void show(int color)                                                    // вывод червя
     {
-        int tailX, tailY, i;                                                          // хвостовой элемент, затирающий след
-        for (i = 0; i<lenght; i++)
+        int tailX, tailY, i;                                                // хвостовой элемент, затирающий след
+        for (i = 0; i < lenght; i++)
         {
             gotoXY(ip_worm[i][0], ip_worm[i][1], color);
-            cout<<" ";
+            cout << " ";
         }
         tailX = ip_worm[i][0];
         tailY = ip_worm[i][1];
         gotoXY(tailX, tailY, White);
-        cout<<" ";
+        cout << " ";
         return;
     }
 
-private: 
-    worm():lenght(3),direction(1)
+private:
+    worm():lenght(3), direction(1)
     {    }
-         
+
     ~worm()
     {    }
 

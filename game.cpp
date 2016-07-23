@@ -25,11 +25,11 @@
 
 using namespace std;
 
-void newGame    ( );                                                            // новая игра
-int  crawling   ( int [] [2] , int* );                              // управление процессом игры
-int  wormBuilt  ( int [] [2] , int* );
-void newBox     ( prize );
-void gotoXY     ( int        , int  , int );
+void newGame();                                                            // новая игра
+int  crawling(int[][2], int*);                                          // управление процессом игры
+int  wormBuilt(int[][2], int*);
+void newBox(prize);
+void gotoXY(int, int, int);
 
 enum Color {                                                                    // перечисление цветов вывода в консоль
     Black = 0,
@@ -53,130 +53,130 @@ enum Color {                                                                    
 prize box[10];
 worm &WORM = worm::getWorm();
 
-int main        ( )
+int main()
 {
-    SetCursorPos ( 600 , 0 ) ;
-    SetConsoleTitleA( "WORM: ESC - exit, ENTER - restart, arrow keys for driving worm" ) ;
-    newGame ( ) ;
-    return 0 ;
+    SetCursorPos(600, 0);
+    SetConsoleTitleA("WORM: ESC - exit, ENTER - restart, arrow keys for driving worm");
+    newGame();
+    return 0;
 }
 
-void newGame    ( )                                                             // новая игра
+void newGame()                                                             // новая игра
 {
-    gotoXY ( 0 , 0 , White );                                                   // установим цвет фона белым
-    int quiteCode ;                                                             // переменная-признак
+    gotoXY(0, 0, White);                                                   // установим цвет фона белым
+    int quiteCode;                                                             // переменная-признак
     do
     {
-        system ( "cls" ) ;
-        int lenght = MAX_SIZE - 41 ;                                            // длина червя
-        int wormArray [ MAX_SIZE ] [ 2 ] = { 40 , 12 } ;                        // начальные координаты червя
-        for (int i = 0; i<10; i++)
+        system("cls");
+        int lenght = MAX_SIZE - 41;                                            // длина червя
+        int wormArray[MAX_SIZE][2] = {40 , 12};                        // начальные координаты червя
+        for (int i = 0; i < 10; i++)
         {
             newBox(box[i]);
         }
-        int dX, dY ;
-        dY = 0 ;
-        dX = rand ( ) % 3 - 1 ;
-        if ( dX == 0 ) dY = 1 ;
-        quiteCode = crawling ( wormArray , &lenght ) ;                // crawling() возвращает код выхода RESTART_CODE или EXIT_SUCCESS
+        int dX, dY;
+        dY = 0;
+        dX = rand() % 3 - 1;
+        if (dX == 0) dY = 1;
+        quiteCode = crawling(wormArray, &lenght);                          // crawling() возвращает код выхода RESTART_CODE или EXIT_SUCCESS
                                                                                 // в переменную-признак. В аргументах массив с элементами
                                                                                 // тела червя, длина червя и сдвиги по осям Х и У.
-        if ( quiteCode == EXIT_SUCCESS ) return ;                               // выход из игры
-    } while ( quiteCode == RESTART_CODE ) ;                                     // циклический вызов новой игры
-    return ;
+        if (quiteCode == EXIT_SUCCESS) return;                               // выход из игры
+    } while (quiteCode == RESTART_CODE);                                     // циклический вызов новой игры
+    return;
 }
 
-int crawling    ( int wormArray [] [2] , int *lenght )        // управление процессом игры
+int crawling(int wormArray[][2], int *lenght)                          // управление процессом игры
 {
     do                                                                          // бесконечный цикл
     {
         while (!_kbhit())
         {
-            int resultCode = wormBuilt ( wormArray , lenght ) ;           //  ОСНОВНОЙ                        |
-            if ( resultCode != CONTINUE_CODE ) return resultCode ;              //  РАБОЧИЙ                         |
-            Sleep ( 60 ) ;                                                      //  ЦИКЛ                            |
+            int resultCode = wormBuilt(wormArray, lenght);                 //  ОСНОВНОЙ                        |
+            if (resultCode != CONTINUE_CODE) return resultCode;              //  РАБОЧИЙ                         |
+            Sleep(60);                                                      //  ЦИКЛ                            |
         }
-        char pressedKey = _getch ( );
-        switch ( pressedKey )
+        char pressedKey = _getch();
+        switch (pressedKey)
         {
         case ESC:
-            system ("cls");
+            system("cls");
             return EXIT_SUCCESS;
             break;
         case ENTER:
-            return RESTART_CODE ;
+            return RESTART_CODE;
             break;
         case LEFT_KEY:
-            if ( WORM.getDirection()!=left_Dir )                                         // Если не двигаемся вправо,
+            if (WORM.getDirection() != left_Dir)                                // Если не двигаемся вправо,
             {
-                WORM.setDirection(left_Dir) ;                                         // смещение по оси Х влево.
+                WORM.setDirection(left_Dir);                                   // смещение по оси Х влево.
             }
             break;
         case RIGHT_KEY:
-            if ( WORM.getDirection()!=right_Dir)                                                     // Если не двигаемся влево,
+            if (WORM.getDirection() != right_Dir)                                // Если не двигаемся влево,
             {
-                WORM.setDirection(right_Dir);                                         // смещение по оси Х влево.
+                WORM.setDirection(right_Dir);                                   // смещение по оси Х влево.
             }
             break;
         case UP_KEY:
-            if (WORM.getDirection()!=up_Dir)                                                     // Если не двигаемся влево,
+            if (WORM.getDirection() != up_Dir)                                    // Если не двигаемся влево,
             {
-                WORM.setDirection(up_Dir);                                         // смещение по оси Х влево.
+                WORM.setDirection(up_Dir);                                      // смещение по оси Х влево.
             }
             break;
         case DOWN_KEY:
-            if (WORM.getDirection()!=down_Dir)                                                     // Если не двигаемся влево,
+            if (WORM.getDirection() != down_Dir)                                                     // Если не двигаемся влево,
             {
                 WORM.setDirection(down_Dir);                                         // смещение по оси Х влево.
             }
             break;
         }
-    } while ( TRUE ) ;                                                          // бесконечный цикл
+    } while (TRUE);                                                          // бесконечный цикл
     return EXIT_PROCESS_DEBUG_EVENT;
 }
 
-int wormBuilt   ( int wormArray [] [2] , int *lenght )        // изменение массива с координатами тела червя ...
+int wormBuilt(int wormArray[][2], int *lenght)                          // изменение массива с координатами тела червя ...
 {                                                                               // ... и проверки на столкновения
-    int tmpX , tmpY ;
-    tmpX = wormArray [ 0 ] [ 0 ] + dX ;                                         // сохраняем координаты головы червя
-    tmpY = wormArray [ 0 ] [ 1 ] + dY ;                                         // и прибавляем смещение
-    int i ;
-    for ( i = 4 ; i < *lenght - 1 ; i++ )                                       // проверка на столкновение головы с другими элементами его
+    int tmpX, tmpY;
+    tmpX = wormArray[0][0] + dX;                                         // сохраняем координаты головы червя
+    tmpY = wormArray[0][1] + dY;                                         // и прибавляем смещение
+    int i;
+    for (i = 4; i < *lenght - 1; i++)                                       // проверка на столкновение головы с другими элементами его
     {                                                                           // тела, -1 чтобы не сталкиваться с невидимой частью хвоста
         if (tmpX == wormArray[i][0])                                            // если координата Х совпала -
         {                                                                       // проверяем
             if (tmpY == wormArray[i][1])                                        // координату У, если она
             {                                                                   // тоже совпала, то ...
-                Worm ( wormArray , lenght , LightRed + 8 ) ;
-                Worm ( wormArray , lenght , White + 8 ) ;                       // затираем червяка белым цветом ...
+                WORM.show(LightRed);
+                WORM.show(White);                                               // затираем червяка белым цветом ...
                 *lenght -= 3;                                                   // уменьшаем длину тела и ...
-                Worm ( wormArray , lenght , LightRed + 8 ) ;                    // ... выводим червя нового размера
+                WORM.show(LightRed);                                            // ... выводим червя нового размера
                 return CONTINUE_CODE;                                           // ... играем дальше
             }
         }
     }
-    if ( tmpX < 1 || tmpX > 78 || tmpY < 1 || tmpY > 23 )                       // проверка на выход за границы поля
+    if (tmpX < 1 || tmpX > 78 || tmpY < 1 || tmpY > 23)                       // проверка на выход за границы поля
     {                                                                           //
-        --*lenght ;                                                             // уменьшаем длину тела червяка
-        Worm ( wormArray , lenght , LightRed + 8 ) ;                            //
-        if ( *lenght < 3 )                                                      // если длина стала минимальной ...
+        --*lenght;                                                             // уменьшаем длину тела червяка
+        WORM.show(LightRed);                                                    //
+        if (*lenght < 3)                                                      // если длина стала минимальной ...
         {                                                                       // ...
-            if ( _getch ( ) == ESC ) return EXIT_SUCCESS;                       // ...
+            if (_getch() == ESC) return EXIT_SUCCESS;                       // ...
             return RESTART_CODE;                                                // играем заново,
         }                                                                       // а если нет...
-        return CONTINUE_CODE ;                                                  // ... то движемся дальше
+        return CONTINUE_CODE;                                                  // ... то движемся дальше
     }
 
-    for (int i = 0; i<10; i++) 
+    for (int i = 0; i < 10; i++)
     {
-        if (tmpX==box[i].getX())                                                // проверка координат головы
+        if (tmpX == box[i].getX())                                                // проверка координат головы
         {                                                                       // на совпадение с координатами фруктов
-            if (tmpY==box[i].getY())                                            //
+            if (tmpY == box[i].getY())                                            //
             {                                                                   //
                 ++ *lenght;                                                     //
                 WORM.show(Red);                                                 //
                 Sleep(20);                                                      //
-                if (*lenght>MAX_SIZE)                                           // увеличиваем длину червя и проверяем
+                if (*lenght > MAX_SIZE)                                           // увеличиваем длину червя и проверяем
                 {                                                               // её на превышение максимума.
                     return RESTART_CODE;                                        // если длина максимальна, перезапускаем игру ...
                 }                                                               //
@@ -190,27 +190,25 @@ int wormBuilt   ( int wormArray [] [2] , int *lenght )        // изменен�
             }
         }
     }
-    wormArray [0] [0] = tmpX ;                                                  /* восстанавливаем координаты головы                */
-    wormArray [0] [1] = tmpY ;                                                  /*                                                  */
-    WORM.show(Blue);                     /* вывод тела червя цветом найденного приза         */
+    wormArray[0][0] = tmpX;                                                  /* восстанавливаем координаты головы                */
+    wormArray[0][1] = tmpY;                                                  /*                                                  */
+    WORM.show(Blue);                                                            /* вывод тела червя цветом найденного приза         */
     return CONTINUE_CODE;
 }
 
-
-
 void newBox(prize box)
 {
-    gotoXY(box.getX(), box.getY(),box.getColor());
-    cout<<box.getFace();
+    gotoXY(box.getX(), box.getY(), box.getColor());
+    cout << box.getFace();
 }
 
-void gotoXY     ( int x , int y , int back )                                    // перевод курсора в положение X,Y
+void gotoXY(int x, int y, int back)                                    // перевод курсора в положение X,Y
 {                                                                               // и задание цвета символа
-    HANDLE console = GetStdHandle ( STD_OUTPUT_HANDLE ) ;
-    COORD coord ;
-    coord . X = x ;
-    coord . Y = y ;
-    SetConsoleCursorPosition ( console , coord ) ;                              // позиция курсора
-    SetConsoleTextAttribute ( console , (WORD) ( back << 4 ) ) ;                // цвет фона
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(console, coord);                              // позиция курсора
+    SetConsoleTextAttribute(console, (WORD) (back << 4));                // цвет фона
     return;
 }
