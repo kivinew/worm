@@ -25,8 +25,8 @@
 
 using namespace std;
 
-void newGame();                                                            // новая игра
-int  crawling(int[][2], int*);                                          // управление процессом игры
+void newGame();                                                                 // новая игра
+int  crawling(int[][2], int*);                                                  // управление процессом игры
 int  wormBuilt(int[][2], int*);
 void newBox(prize);
 void gotoXY(int, int, int);
@@ -61,15 +61,15 @@ int main()
     return 0;
 }
 
-void newGame()                                                             // новая игра
+void newGame()                                                                  // новая игра
 {
-    gotoXY(0, 0, White);                                                   // установим цвет фона белым
-    int quiteCode;                                                             // переменная-признак
+    gotoXY(0, 0, White);                                                        // установим цвет фона белым
+    int quiteCode;                                                              // переменная-признак
     do
     {
         system("cls");
-        int lenght = MAX_SIZE - 41;                                            // длина червя
-        int wormArray[MAX_SIZE][2] = {40 , 12};                        // начальные координаты червя
+        int length = MAX_SIZE - 41;                                             // длина червя
+        int wormArray[MAX_SIZE][2] = {40 , 12};                                 // начальные координаты червя
         for (int i = 0; i < 10; i++)
         {
             newBox(box[i]);
@@ -78,23 +78,23 @@ void newGame()                                                             // н
         dY = 0;
         dX = rand() % 3 - 1;
         if (dX == 0) dY = 1;
-        quiteCode = crawling(wormArray, &lenght);                          // crawling() возвращает код выхода RESTART_CODE или EXIT_SUCCESS
+        quiteCode = crawling(wormArray, &length);                               // crawling() возвращает код выхода RESTART_CODE или EXIT_SUCCESS
                                                                                 // в переменную-признак. В аргументах массив с элементами
                                                                                 // тела червя, длина червя и сдвиги по осям Х и У.
-        if (quiteCode == EXIT_SUCCESS) return;                               // выход из игры
-    } while (quiteCode == RESTART_CODE);                                     // циклический вызов новой игры
+        if (quiteCode == EXIT_SUCCESS) return;                                  // выход из игры
+    } while (quiteCode == RESTART_CODE);                                        // циклический вызов новой игры
     return;
 }
 
-int crawling(int wormArray[][2], int *lenght)                          // управление процессом игры
+int crawling(int wormArray[][2], int *length)                                   // управление процессом игры
 {
     do                                                                          // бесконечный цикл
     {
         while (!_kbhit())
         {
-            int resultCode = wormBuilt(wormArray, lenght);                 //  ОСНОВНОЙ                        |
-            if (resultCode != CONTINUE_CODE) return resultCode;              //  РАБОЧИЙ                         |
-            Sleep(60);                                                      //  ЦИКЛ                            |
+            int resultCode = wormBuilt(wormArray, length);                      //  ОСНОВНОЙ                        |
+            if (resultCode != CONTINUE_CODE) return resultCode;                 //  РАБОЧИЙ                         |
+            Sleep(60);                                                          //  ЦИКЛ                            |
         }
         char pressedKey = _getch();
         switch (pressedKey)
@@ -131,17 +131,18 @@ int crawling(int wormArray[][2], int *lenght)                          // упр
             }
             break;
         }
-    } while (TRUE);                                                          // бесконечный цикл
+    } while (TRUE);                                                             // бесконечный цикл
     return EXIT_PROCESS_DEBUG_EVENT;
 }
 
-int wormBuilt(int wormArray[][2], int *lenght)                          // изменение массива с координатами тела червя ...
+int wormBuilt(int wormArray[][2], int *length)                                  // изменение массива с координатами тела червя ...
 {                                                                               // ... и проверки на столкновения
     int tmpX, tmpY;
-    tmpX = wormArray[0][0] + dX;                                         // сохраняем координаты головы червя
-    tmpY = wormArray[0][1] + dY;                                         // и прибавляем смещение
+    WORM.shift();
+    tmpX = WORM.getX();
+    tmpY = WORM.getY();
     int i;
-    for (i = 4; i < *lenght - 1; i++)                                       // проверка на столкновение головы с другими элементами его
+    for (i = 4; i < *length - 1; i++)                                           // проверка на столкновение головы с другими элементами его
     {                                                                           // тела, -1 чтобы не сталкиваться с невидимой частью хвоста
         if (tmpX == wormArray[i][0])                                            // если координата Х совпала -
         {                                                                       // проверяем
@@ -149,49 +150,40 @@ int wormBuilt(int wormArray[][2], int *lenght)                          // из�
             {                                                                   // тоже совпала, то ...
                 WORM.show(LightRed);
                 WORM.show(White);                                               // затираем червяка белым цветом ...
-                *lenght -= 3;                                                   // уменьшаем длину тела и ...
+                *length -= 3;                                                   // уменьшаем длину тела и ...
                 WORM.show(LightRed);                                            // ... выводим червя нового размера
                 return CONTINUE_CODE;                                           // ... играем дальше
             }
         }
     }
-    if (tmpX < 1 || tmpX > 78 || tmpY < 1 || tmpY > 23)                       // проверка на выход за границы поля
+    if (tmpX < 1 || tmpX > 78 || tmpY < 1 || tmpY > 23)                         // проверка на выход за границы поля
     {                                                                           //
-        --*lenght;                                                             // уменьшаем длину тела червяка
+        --*length;                                                              // уменьшаем длину тела червяка
         WORM.show(LightRed);                                                    //
-        if (*lenght < 3)                                                      // если длина стала минимальной ...
+        if (*length < 3)                                                        // если длина стала минимальной ...
         {                                                                       // ...
-            if (_getch() == ESC) return EXIT_SUCCESS;                       // ...
+            if (_getch() == ESC) return EXIT_SUCCESS;                           // ...
             return RESTART_CODE;                                                // играем заново,
         }                                                                       // а если нет...
-        return CONTINUE_CODE;                                                  // ... то движемся дальше
+        return CONTINUE_CODE;                                                   // ... то движемся дальше
     }
 
     for (int i = 0; i < 10; i++)
     {
-        if (tmpX == box[i].getX())                                                // проверка координат головы
+        if (tmpX == box[i].getX())                                              // проверка координат головы
         {                                                                       // на совпадение с координатами фруктов
-            if (tmpY == box[i].getY())                                            //
+            if (tmpY == box[i].getY())                                          //
             {                                                                   //
-                ++ *lenght;                                                     //
+                ++ *length;                                                     //
                 WORM.show(Red);                                                 //
                 Sleep(20);                                                      //
-                if (*lenght > MAX_SIZE)                                           // увеличиваем длину червя и проверяем
+                if (*length > MAX_SIZE)                                         // увеличиваем длину червя и проверяем
                 {                                                               // её на превышение максимума.
                     return RESTART_CODE;                                        // если длина максимальна, перезапускаем игру ...
                 }                                                               //
-                /*for (int i = 0; i<10; i++)
-                {
-                    int x = box[i].getX();
-                    int y = box[i].getY();
-                    gotoXY(x, y, White);
-                    printf(" ");
-                }*/
             }
         }
     }
-    wormArray[0][0] = tmpX;                                                  /* восстанавливаем координаты головы                */
-    wormArray[0][1] = tmpY;                                                  /*                                                  */
     WORM.show(Blue);                                                            /* вывод тела червя цветом найденного приза         */
     return CONTINUE_CODE;
 }
@@ -202,13 +194,3 @@ void newBox(prize box)
     cout << box.getFace();
 }
 
-void gotoXY(int x, int y, int back)                                    // перевод курсора в положение X,Y
-{                                                                               // и задание цвета символа
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(console, coord);                              // позиция курсора
-    SetConsoleTextAttribute(console, (WORD) (back << 4));                // цвет фона
-    return;
-}

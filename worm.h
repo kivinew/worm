@@ -1,12 +1,14 @@
 #pragma once
 #include <iostream>
+#include "goto.h"
 using namespace std;
 
 class worm
 {
-    int lenght;
+    int length,
+        life,
+        direction;                                                          // направление движения;
     static int **ip_worm;                                                   // указатель на динамический массив
-    int direction;                                                          // направление движения
 
 public:
     static worm& getWorm()
@@ -17,21 +19,24 @@ public:
 
     int getLenght()
     {
-        return lenght;
+        return length;
     }
 
     void increase()
     {
-        if (lenght < 40)
-            lenght++;
+        if (length < 40)
+            length++;
         else
-            lenght = 3;
+        {
+            life++;
+            length = 3;
+        }
     }
 
     void decrease()
     {
-        if (lenght > 3)
-            lenght--;
+        if (length > 3)
+            length--;
         else
             exit(0);
     }
@@ -46,32 +51,52 @@ public:
         return direction;
     }
 
+    int getX()
+    {
+        return ip_worm[0][0];
+    }
+    
+    int getY()
+    {
+        return ip_worm[0][1];
+    }
+
     void shift()
     {
-        for (int i = lenght - 1; i > 0; i--)                                    /* сдвигаем элементы массива на один вправо         */
-        {                                                                       /*                                                  */
-            ip_worm[i][0] = ip_worm[i - 1][0];                                  /*                                                  */
-            ip_worm[i][1] = ip_worm[i - 1][1];                                  /*                                                  */
+        int dX, dY;
+        if (direction == 0) dX = -1;
+        if (direction == 1) dX = 1;
+        if (direction == 2) dY = -1;
+        else dY = 1;
+        ip_worm[0][0] += dX;                                              // 
+        ip_worm[0][1] += dY;                                              // прибавляем смещение
+
+
+
+        for (int i = length - 1; i > 0; i--)                                /* сдвигаем элементы массива на один вправо         */
+        {                                                                   /*                                                  */
+            ip_worm[i][0] = ip_worm[i - 1][0];                              /*                                                  */
+            ip_worm[i][1] = ip_worm[i - 1][1];                              /*                                                  */
         }
     }
 
     void show(int color)                                                    // вывод червя
     {
         int tailX, tailY, i;                                                // хвостовой элемент, затирающий след
-        for (i = 0; i < lenght; i++)
+        for (i = 0; i < length; i++)
         {
             gotoXY(ip_worm[i][0], ip_worm[i][1], color);
             cout << " ";
         }
         tailX = ip_worm[i][0];
         tailY = ip_worm[i][1];
-        gotoXY(tailX, tailY, White);
+        gotoXY(tailX, tailY, 15);
         cout << " ";
         return;
     }
 
 private:
-    worm():lenght(3), direction(1)
+    worm():length(3), direction(1)
     {    }
 
     ~worm()
