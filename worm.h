@@ -1,14 +1,17 @@
-#pragma once
-#include <iostream>
-#include "goto.h"
+﻿#pragma once
+#include "header.h"
 using namespace std;
 
 class worm
 {
+private:
     int length,
         life,
-        direction;                                                          // ����������� ��������;
-    static int **ip_worm;                                                   // ��������� �� ������������ ������
+        direction;                                                          // направление движения;
+    struct coordinates
+    {
+        int X[40], Y[40];
+    }COORD;                                                                 // структура массивов координат
 
 public:
     static worm& getWorm()
@@ -22,28 +25,24 @@ public:
         return length;
     }
 
-    void increase()
+    void lengthChange(int change)
     {
-        if (length < 40)
-            length++;
-        else
+        length += change;
+        if (length > 40)
         {
             life++;
             length = 3;
         }
-    }
-
-    void decrease()
-    {
-        if (length > 3)
-            length--;
         else
-            exit(0);
+            if (length < 3)
+                length = 3;//_getch();// exit(0);
+        return;
     }
 
     void setDirection(int dir)
     {
         direction = dir;
+        return;
     }
 
     int getDirection()
@@ -53,51 +52,98 @@ public:
 
     int getX()
     {
-        return ip_worm[0][0];
+        return COORD.X[0];
     }
-    
+
     int getY()
     {
-        return ip_worm[0][1];
+        return COORD.Y[0];
     }
 
-    void shift()
+    void move()
     {
-        int dX, dY;
-        if (direction == 0) dX = -1;
-        if (direction == 1) dX = 1;
-        if (direction == 2) dY = -1;
-        else dY = 1;
-        ip_worm[0][0] += dX;                                              // 
-        ip_worm[0][1] += dY;                                              // ���������� ��������
-
-
-
-        for (int i = length - 1; i > 0; i--)                                /* �������� �������� ������� �� ���� ������         */
-        {                                                                   /*                                                  */
-            ip_worm[i][0] = ip_worm[i - 1][0];                              /*                                                  */
-            ip_worm[i][1] = ip_worm[i - 1][1];                              /*                                                  */
-        }
-    }
-
-    void show(int color)                                                    // ����� �����
-    {
-        int tailX, tailY, i;                                                // ��������� �������, ���������� ����
-        for (i = 0; i < length; i++)
+        int dX=0, dY=0,
+            headX = COORD.X[0], headY = COORD.Y[0];
+        switch (direction)
         {
-            gotoXY(ip_worm[i][0], ip_worm[i][1], color);
+        case left_dir:
+            dX = -1;
+            break;
+        case right_dir:
+            dX = 1;
+            break;
+        case up_dir:
+            dY = -1;
+            break;
+        case down_dir:
+            dY = 1;
+            break;
+        }
+        headX += dX;
+        headY += dY;
+        // проверяем координаты головы на выход за пределы поля
+        if (headX < 1 || headX > 78 || headY < 1 || headY > 23)
+        {
+            lengthChange(-1);                                               // уменьшаем длину тела червяка.
+        }
+        // проверка на столкновение головы с другими элементами его тела
+        //for (int i = 4; i < getLenght() - 1; i++)
+        //{                                                                   //  -1 чтобы не сталкиваться с невидимой частью хвоста
+        //    if (headX == COORD.X[i])                                        // если координата Х совпала -
+        //    {                                                               // проверяем
+        //        if (headY == COORD.Y[i])                                    // координату У, если она
+        //        {                                                           // тоже совпала, то ...
+        //            //show(LightRed);
+        //            //show(White);                                          // затираем червяка белым цветом ...
+        //            lengthChange(-3);                                       // уменьшаем длину тела и ...
+        //            //show(LightRed);                                         // ... выводим червя нового размера
+        //        }
+        //    }
+        //}
+        // проверка координат головы на совпадение с координатами фруктов
+        //for (int i = 0; i < 10; i++) 
+        //{
+        //    if (headX == box[i].getX())
+        //    {
+        //        if (headY == box[i].getY())                                 //
+        //        {                                                           //
+        //            lengthChange(1);                                   //
+        //            //show(Red);                                         //
+        //        }
+        //    }
+        //}
+
+        for (int i = length - 1; i > 0; i--)                                /* сдвигаем элементы массива на один вправо         */
+        {                                                                   /*                                                  */
+            COORD.X[i] = COORD.X[i - 1];                                    /*                                                  */
+            COORD.Y[i] = COORD.Y[i - 1];                                    /*                                                  */
+        }
+        COORD.X[0] = headX;
+        COORD.Y[0] = headY;
+        return;
+    }
+
+    void show(int color)                                                    // вывод червя
+    {
+        int tailX, tailY, i;                                                // хвостовой элемент, затирающий след
+        for ( i = 0; i < length; i++)
+        {
+            gotoXY(COORD.X[i], COORD.Y[i], color);
             cout << " ";
         }
-        tailX = ip_worm[i][0];
-        tailY = ip_worm[i][1];
-        gotoXY(tailX, tailY, 15);
+        tailX = COORD.X[i];
+        tailY = COORD.Y[i];
+        gotoXY(tailX, tailY, White);
         cout << " ";
         return;
     }
 
 private:
-    worm():length(3), direction(1)
-    {    }
+    worm():length(4), direction(2)
+    {
+        /*COORD.X[0] = 40;
+        COORD.Y[0] = 12;*/
+    }
 
     ~worm()
     {    }

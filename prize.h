@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "header.h"
 class prize
 {
     int             x;
@@ -7,11 +7,11 @@ class prize
     char            face;
     int             color;
     bool            state;
-    int static      count;
+    int             count;
     time_t          lifeTime;
 public:
 
-    prize(): x(0), y(0), color(14), lifeTime(GetTickCount())
+    prize(): x(0), y(0), color(LightBlue), lifeTime(GetTickCount())
     {
         srand((unsigned int) time(NULL));                            // -------------------------------------
     }
@@ -55,5 +55,10 @@ public:
     int getState()
     {
         return state;
+    }
+
+    int getCount()
+    {
+        return count;
     }
 };
