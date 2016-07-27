@@ -10,7 +10,7 @@ private:
         direction;                                                          // направление движения;
     struct coordinates
     {
-        int X[40], Y[40];
+        int X[40], Y[12];
     }COORD;                                                                 // структура массивов координат
 
 public:
@@ -35,7 +35,7 @@ public:
         }
         else
             if (length < 3)
-                length = 3;//_getch();// exit(0);
+                length = 3;
         return;
     }
 

@@ -11,36 +11,37 @@ class prize
     time_t          lifeTime;
 public:
 
-    prize(): x(0), y(0), color(LightBlue), lifeTime(GetTickCount())
+    prize()
     {
         srand((unsigned int) time(NULL));                            // -------------------------------------
+        x = rand() % 78;
+        y = rand() % 23;
+        color = LightBlue;
+        lifeTime = GetTickCount();
+        count = 1;
+        face = ' ';
+        state = true;
     }
 
-    ~prize()
-    {
-    }
+    ~prize(){    }
 
     int getX()
     {
-        x = rand() % 78 + 1;
         return x;
     }
 
     int getY()
     {
-        y = rand() % 23 + 1;
         return y;
     }
 
     char getFace()
     {
-        face = ' ';
         return face;
     }
 
     int getColor()
     {
-        color = rand() % 7 + 8;
         return color;
     }
 
