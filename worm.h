@@ -34,9 +34,10 @@ public:
             life++;
             length = 3;
         }
-        else
-            if (length < 3)
-                exit(0);
+        else if (length < 3)
+        {
+            exit(0);
+        }
         return;
     }
 
@@ -109,7 +110,7 @@ public:
         //    }
         //}
         // проверка координат головы на совпадение с координатами призов
-        for (int i = 0; i < 10/*prize::getCount()*/; i++)
+        for (int i = 0; i < prize::getCount(); i++)
         {
             if (headX == box[i].x)
             {
@@ -147,7 +148,7 @@ public:
     }
 
 private:
-    worm(): length(40), color(7)
+    worm(): length(5), color(7)
     {
         direction = right_dir;
         COORD.X[0] = 40;

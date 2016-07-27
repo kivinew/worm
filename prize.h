@@ -6,8 +6,8 @@ class prize
     int             x, y, color;
     char            face;
     bool            state;
-    static int      count;
     time_t          lifeTime;
+    static int      count;
 public:
     prize()
     {
@@ -24,7 +24,7 @@ public:
 
     ~prize() 
     {
-        cout << count-- << " приз\n";
+        cout << count--;
     }
 
     void showPrize()
@@ -57,5 +57,7 @@ public:
         return count;
     }
 
-    friend class worm;
+    friend void worm::move(prize*);
 };
+
+int prize::count = 0;
