@@ -140,10 +140,7 @@ public:
 
 private:
     worm():length(4), direction(2)
-    {
-        /*COORD.X[0] = 40;
-        COORD.Y[0] = 12;*/
-    }
+    {    }
 
     ~worm()
     {    }

@@ -10,7 +10,7 @@ using namespace std;
 
 void newGame();                                                             // новая игра
 int  crawling();                                                            // управление процессом игры
-int  wormBuilt();
+int  wormShow();
 void newBox(prize);
 void gotoXY(int, int, int);
 
@@ -51,9 +51,8 @@ int crawling()
     {
         while (!_kbhit())
         {
-            int resultCode = wormBuilt();                                       //  ОСНОВНОЙ                        |
+            int resultCode = wormShow();                                       //  ОСНОВНОЙ                        |
             if (resultCode != CONTINUE_CODE) return resultCode;                 //  РАБОЧИЙ                         |
-            Sleep(80);                                                          //  ЦИКЛ                            |
         }
         char pressedKey = _getch();
         switch (pressedKey)
@@ -93,11 +92,13 @@ int crawling()
     } while (TRUE);                                                             // бесконечный цикл
     return EXIT_DEBUG_EVENT;
 }
-// изменение массива с координатами тела червя ...
-int wormBuilt()                                           
+// вывод тела червя ...
+int wormShow()                                           
 {
     WORM.move();
     WORM.show(Blue);                                                        /* вывод тела червя цветом найденного приза         */
+    Sleep(40);
+    WORM.show(White);                                                       /* вывод тела червя цветом найденного приза         */
     return CONTINUE_CODE;
 }
 // вывод нового приза
