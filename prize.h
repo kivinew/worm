@@ -19,9 +19,13 @@ public:
         lifeTime = GetTickCount();
         face = ' ';
         state = true;
+        count++;
     }
 
-    ~prize() {    }
+    ~prize() 
+    {
+        cout << count-- << " приз\n";
+    }
 
     void showPrize()
     {
@@ -53,5 +57,5 @@ public:
         return count;
     }
 
-    friend worm;
+    friend class worm;
 };

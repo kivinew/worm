@@ -66,10 +66,10 @@ public:
         return COORD.Y[0];
     }
 
-    void move()
+    void move(prize *box)
     {
-        int dX=0, dY=0,
-            headX = COORD.X[0], 
+        int dX = 0, dY = 0,
+            headX = COORD.X[0],
             headY = COORD.Y[0];
         switch (direction)
         {
@@ -108,8 +108,8 @@ public:
         //        }
         //    }
         //}
-        // проверка координат головы на совпадение с координатами фруктов
-        for (int i = 0; i < prize::getCount(); i++) 
+        // проверка координат головы на совпадение с координатами призов
+        for (int i = 0; i < 10/*prize::getCount()*/; i++)
         {
             if (headX == box[i].x)
             {
@@ -147,11 +147,11 @@ public:
     }
 
 private:
-    worm(): length(40), direction(right_dir), color(7)
+    worm(): length(40), color(7)
     {
+        direction = right_dir;
         COORD.X[0] = 40;
         COORD.Y[0] = 12;
-
     }
 
     ~worm()

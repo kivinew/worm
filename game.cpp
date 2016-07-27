@@ -91,7 +91,7 @@ int crawling()
 // вывод тела червя ...
 int wormShow()                                           
 {
-    WORM.move();
+    WORM.move(box);
     WORM.show();                                                                // вывод червя
     return CONTINUE_CODE;
 }
