@@ -2,18 +2,15 @@
 ///    можно менять (стрелками). Червяк ест призы и растет. Задача - при движении
 ///    головы не наткнуться на хвост и границы экрана.
 
+#include "header.h"
 #include "prize.h"
 #include "worm.h"
-#include "header.h"
 
 using namespace std;
 
-void newGame();                                                             // новая игра
-int  crawling();                                                            // управление процессом игры
+void newGame();                                                                 // новая игра
+int  crawling();                                                                // управление процессом игры
 int  wormShow();
-void newBox(prize);
-void gotoXY(int, int, int);
-
 
 prize box[10];
 worm &WORM = worm::getWorm();
@@ -25,17 +22,17 @@ int main()
     newGame();
     return EXIT_DEBUG_EVENT;
 }
-
+// новая игра
 void newGame()                                                                  // новая игра
 {
     gotoXY(0, 0, White);                                                        // установим цвет фона белым
-    int quiteCode = 0;                                                              // переменная-признак
+    int quiteCode = 0;                                                          // переменная-признак
     do
     {
         system("cls");
-        for (int i = 0; i < box[0].getCount(); i++)
+        for each(prize nextBox in box)
         {
-            newBox(box[i]);
+            nextBox.showPrize();
         }
         quiteCode = crawling();                                                 // crawling() возвращает код выхода RESTART_CODE или EXIT_SUCCESS
                                                                                 // в переменную-признак.
@@ -64,25 +61,25 @@ int crawling()
             return RESTART_CODE;                                                //                                  |
             break;                                                              //                                  |
         case LEFT_KEY:                                                          //                                  |
-            if (WORM.getDirection() != left_dir)                                // Если не двигаемся вправо,        |
+            if (WORM.getDirection() != right_dir)                                // Если не двигаемся вправо,        |
             {                                                                   //                                  |
                 WORM.setDirection(left_dir);                                    // смещение по оси Х влево.         |
             }                                                                   //                                  |
             break;                                                              //                                  |
         case RIGHT_KEY:                                                         //                                  |
-            if (WORM.getDirection() != right_dir)                               // Если не двигаемся влево,         |
+            if (WORM.getDirection() != left_dir)                               // Если не двигаемся влево,         |
             {                                                                   //                                  |
                 WORM.setDirection(right_dir);                                   // смещение по оси Х влево.         |
             }                                                                   //                                  |
             break;                                                              //                                  |
         case UP_KEY:                                                            //                                  |
-            if (WORM.getDirection() != up_dir)                                  // Если не двигаемся влево,         |
+            if (WORM.getDirection() != down_dir)                                  // Если не двигаемся влево,         |
             {                                                                   //                                  |
                 WORM.setDirection(up_dir);                                      // смещение по оси Х влево.         |
             }                                                                   //                                  |
             break;                                                              //                                  |
         case DOWN_KEY:                                                          //                                  |
-            if (WORM.getDirection() != down_dir)                                // Если не двигаемся влево,         |
+            if (WORM.getDirection() != up_dir)                                // Если не двигаемся влево,         |
             {                                                                   //                                  |
                 WORM.setDirection(down_dir);                                    // смещение по оси Х влево.         |
             }                                                                   //                                  |
@@ -95,16 +92,6 @@ int crawling()
 int wormShow()                                           
 {
     WORM.move();
-    
-    WORM.show(Blue);                                                        /* вывод тела червя цветом найденного приза         */
-    Sleep(40);
-    WORM.show(White);                                                       /* вывод тела червя цветом найденного приза         */
+    WORM.show();                                                                // вывод червя
     return CONTINUE_CODE;
 }
-// вывод нового приза
-void newBox(prize box)
-{
-    gotoXY(box.getX(), box.getY(), box.getColor());
-    cout << box.getFace();
-}
-

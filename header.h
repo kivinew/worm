@@ -1,8 +1,10 @@
-﻿#ifndef MYLIBS_H_INCLUDED
+﻿#pragma once
 #include <time.h>
 #include <conio.h>
 #include <iostream>
 #include <windows.h>
+#ifndef MYLIBS_H_INCLUDED
+// обозначения кодов и клавиш
 #define MYLIBS_H_INCLUDED
 #define ESC                 27
 #define ENTER               13
@@ -38,9 +40,9 @@ enum Color {
     Yellow = 14,
     White = 15
 };
-// перевод курсора в положение X,Y
+// перевод курсора в положение X,Y и назначение цвета фона
 void gotoXY     ( int x , int y , int back )
-{                                                                               // и задание цвета символа
+{
     HANDLE console = GetStdHandle ( STD_OUTPUT_HANDLE ) ;
     COORD coord ;
     coord . X = x ;

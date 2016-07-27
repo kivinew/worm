@@ -1,43 +1,33 @@
 ﻿#pragma once
 #include "header.h"
+using namespace std;
 class prize
 {
-    int             x;
-    int             y;
+    int             x, y, color;
     char            face;
-    int             color;
     bool            state;
-    int             count;
+    static int      count;
     time_t          lifeTime;
 public:
-
     prize()
     {
         srand((unsigned int) time(NULL));                            // -------------------------------------
+        rand();
         x = rand() % 78;
         y = rand() % 23;
-        color = LightBlue;
+        color = rand() % 15;
         lifeTime = GetTickCount();
-        count = 1;
         face = ' ';
         state = true;
     }
 
-    ~prize(){    }
+    ~prize() {    }
 
-    int getX()
+    void showPrize()
     {
-        return x;
-    }
-
-    int getY()
-    {
-        return y;
-    }
-
-    char getFace()
-    {
-        return face;
+        gotoXY(x, y, color);
+        cout << face;
+        return;
     }
 
     int getColor()
@@ -58,8 +48,10 @@ public:
         return state;
     }
 
-    int getCount()
+    static int getCount()
     {
         return count;
     }
+
+    friend worm;
 };

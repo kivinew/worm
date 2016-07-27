@@ -7,17 +7,18 @@ class worm
 private:
     int length,
         life,
-        direction;                                                          // направление движения;
+        direction,
+        color;                                                              // направление движения;
     struct coordinates
     {
-        int X[40], Y[12];
-    }COORD;                                                                 // структура массивов координат
+        int X[40], Y[40];
+    }COORD;                                                                 // структура массивов координат 40 элементов червя
 
 public:
     static worm& getWorm()
     {
-        static worm object;
-        return object;
+        static worm newWorm;
+        return newWorm;
     }
 
     int getLenght()
@@ -35,7 +36,7 @@ public:
         }
         else
             if (length < 3)
-                length = 3;
+                exit(0);
         return;
     }
 
@@ -48,6 +49,11 @@ public:
     int getDirection()
     {
         return direction;
+    }
+
+    void setColor(int newColor)
+    {
+        color = newColor;
     }
 
     int getX()
@@ -63,7 +69,8 @@ public:
     void move()
     {
         int dX=0, dY=0,
-            headX = COORD.X[0], headY = COORD.Y[0];
+            headX = COORD.X[0], 
+            headY = COORD.Y[0];
         switch (direction)
         {
         case left_dir:
@@ -85,6 +92,7 @@ public:
         if (headX < 1 || headX > 78 || headY < 1 || headY > 23)
         {
             lengthChange(-1);                                               // уменьшаем длину тела червяка.
+            return;
         }
         // проверка на столкновение головы с другими элементами его тела
         //for (int i = 4; i < getLenght() - 1; i++)
@@ -101,17 +109,16 @@ public:
         //    }
         //}
         // проверка координат головы на совпадение с координатами фруктов
-        //for (int i = 0; i < 10; i++) 
-        //{
-        //    if (headX == box[i].getX())
-        //    {
-        //        if (headY == box[i].getY())                                 //
-        //        {                                                           //
-        //            lengthChange(1);                                   //
-        //            //show(Red);                                         //
-        //        }
-        //    }
-        //}
+        for (int i = 0; i < prize::getCount(); i++) 
+        {
+            if (headX == box[i].x)
+            {
+                if (headY == box[i].y)                                      //
+                {                                                           //
+                    lengthChange(1);                                        //
+                }
+            }
+        }
 
         for (int i = length - 1; i > 0; i--)                                /* сдвигаем элементы массива на один вправо         */
         {                                                                   /*                                                  */
@@ -123,24 +130,29 @@ public:
         return;
     }
 
-    void show(int color)                                                    // вывод червя
+    void show()                                                             // вывод червя
     {
-        int tailX, tailY, i;                                                // хвостовой элемент, затирающий след
-        for ( i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
             gotoXY(COORD.X[i], COORD.Y[i], color);
             cout << " ";
         }
-        tailX = COORD.X[i];
-        tailY = COORD.Y[i];
-        gotoXY(tailX, tailY, White);
-        cout << " ";
+        Sleep(40);                                                          // задержка
+        for (int i = 0; i < length; i++)
+        {
+            gotoXY(COORD.X[i], COORD.Y[i], White);
+            cout << " ";
+        }
         return;
     }
 
 private:
-    worm():length(4), direction(2)
-    {    }
+    worm(): length(40), direction(right_dir), color(7)
+    {
+        COORD.X[0] = 40;
+        COORD.Y[0] = 12;
+
+    }
 
     ~worm()
     {    }
