@@ -22,9 +22,10 @@ public:
         count++;
     }
 
-    ~prize() 
+    ~prize()
     {
-        cout << count--;
+        lifeTime = (GetTickCount() - lifeTime) / 1000;
+        cout << lifeTime;
     }
 
     void showPrize()
@@ -57,7 +58,7 @@ public:
         return count;
     }
 
-    friend void worm::move(prize*);
+    friend class worm;
 };
 
 int prize::count = 0;

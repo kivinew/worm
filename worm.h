@@ -1,15 +1,15 @@
 ﻿#pragma once
 #include "header.h"
 using namespace std;
-
+// класс Синглтон (приватный конструктор)
 class worm
 {
 private:
-    int length,
+    int size,
         life,
         direction,
         color;                                                              // направление движения;
-    struct coordinates
+    struct coordinates  
     {
         int X[40], Y[40];
     }COORD;                                                                 // структура массивов координат 40 элементов червя
@@ -23,18 +23,18 @@ public:
 
     int getLenght()
     {
-        return length;
+        return size;
     }
 
-    void lengthChange(int change)
+    void sizeChange(int change)
     {
-        length += change;
-        if (length > 40)
+        size += change;
+        if (size > 40)
         {
             life++;
-            length = 3;
+            size = 3;
         }
-        else if (length < 3)
+        else if (size < 3)
         {
             exit(0);
         }
@@ -92,7 +92,8 @@ public:
         // проверяем координаты головы на выход за пределы поля
         if (headX < 1 || headX > 78 || headY < 1 || headY > 23)
         {
-            lengthChange(-1);                                               // уменьшаем длину тела червяка.
+            sizeChange(-1);                                               // уменьшаем длину тела червяка.
+            color = LightRed;
             return;
         }
         // проверка на столкновение головы с другими элементами его тела
@@ -104,7 +105,7 @@ public:
         //        {                                                           // тоже совпала, то ...
         //            //show(LightRed);
         //            //show(White);                                          // затираем червяка белым цветом ...
-        //            lengthChange(-3);                                       // уменьшаем длину тела и ...
+        //            sizeChange(-3);                                       // уменьшаем длину тела и ...
         //            //show(LightRed);                                         // ... выводим червя нового размера
         //        }
         //    }
@@ -116,12 +117,13 @@ public:
             {
                 if (headY == box[i].y)                                      //
                 {                                                           //
-                    lengthChange(1);                                        //
+                    sizeChange(1);                                        //
+                    color = LightBlue;
                 }
             }
         }
 
-        for (int i = length - 1; i > 0; i--)                                /* сдвигаем элементы массива на один вправо         */
+        for (int i = size - 1; i > 0; i--)                                /* сдвигаем элементы массива на один вправо         */
         {                                                                   /*                                                  */
             COORD.X[i] = COORD.X[i - 1];                                    /*                                                  */
             COORD.Y[i] = COORD.Y[i - 1];                                    /*                                                  */
@@ -133,13 +135,13 @@ public:
 
     void show()                                                             // вывод червя
     {
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < size; i++)
         {
             gotoXY(COORD.X[i], COORD.Y[i], color);
             cout << " ";
         }
         Sleep(40);                                                          // задержка
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < size; i++)
         {
             gotoXY(COORD.X[i], COORD.Y[i], White);
             cout << " ";
@@ -148,15 +150,14 @@ public:
     }
 
 private:
-    worm(): length(5), color(7)
+    worm(): size(5), color(7)
     {
         direction = right_dir;
         COORD.X[0] = 40;
         COORD.Y[0] = 12;
     }
 
-    ~worm()
-    {    }
+    ~worm() {    }
 
     worm(const worm&) = delete;
     worm& operator=(const worm&) = delete;
