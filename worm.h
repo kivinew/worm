@@ -10,6 +10,7 @@ private:
         direction,                                                          // направление движения червя
         color,                                                              // цвет червя
         speed;                                                              // скорость червя
+    char face;                                                              // лицо червя
     struct coordinates                                                      // структура массивов координат 40 элементов червя
     {int X[40], Y[40];
     }COORD;
@@ -59,8 +60,7 @@ public:
     int move(prize *box)
     {
         int dX = 0, dY = 0,
-            headX = COORD.X[0],
-            headY = COORD.Y[0];
+            headX, headY;
         switch (direction)
         {
         case left_dir:
@@ -76,13 +76,12 @@ public:
             dY = 1;
             break;
         }
-        headX += dX;
-        headY += dY;
+        headX = COORD.X[0] + dX;                                            // сохраняем 
+        headY = COORD.Y[0] + dY;                                            // новые координаты головы
         if (size < 3)
         {
             COORD.X[0] = 40;
             COORD.Y[0] = 12;
-            size = 3;
             life--;
             if (life < 1) return EXIT_SUCCESS;
             return RESTART_CODE;
@@ -113,20 +112,20 @@ public:
             {
                 if (headY == box[i].y)                                      //
                 {                                                           //
+                    color = box[i].color;
                     levelUp();
                 }
             }
         }
-        for (int i = size; i > 0; i--)                                      /* сдвигаем элементы массива на один вправо         */
-        {                                                                   /*                                                  */
-            COORD.X[i] = COORD.X[i - 1];                                    /*                                                  */
-            COORD.Y[i] = COORD.Y[i - 1];                                    /*                                                  */
+        for (int i = size; i > 0; i--)                                      // сдвигаем элементы массива на один влево         
+        {                                                                   //                                                  
+            COORD.X[i] = COORD.X[i - 1];                                    //                                                  
+            COORD.Y[i] = COORD.Y[i - 1];                                    //                                                  
         }
-        COORD.X[0] = headX;                                                 // присваиваем новые значения
-        COORD.Y[0] = headY;                                                 // координат головы
+        COORD.X[0] = headX;                                                 // присваиваем значения координат
+        COORD.Y[0] = headY;                                                 // головному элементу
         return CONTINUE_CODE;
     }
-    
     // изменение скорости
     void speedUp(int speedChange)
     {
@@ -134,12 +133,10 @@ public:
         else speed -= speedChange;
         return;
     }
-    
     // червь растёт и ускоряется
     void levelUp()
     {
         size++;                                                             //
-        color = LightBlue;
         speed--;
         if (size > 40)
         {
@@ -149,13 +146,12 @@ public:
         }
         return;
     }
-    
     // вывод червя
     void show()
     {
         int i;
-        gotoXY(COORD.X[0], COORD.Y[0], Black);                              // голова
-        cout << " ";
+        gotoXY(COORD.X[0], COORD.Y[0], LightRed);                           // голова
+        cout << face;
         for (i = 1; i < size; i++)
         {
             gotoXY(COORD.X[i], COORD.Y[i], color);
@@ -176,6 +172,7 @@ private:
         speed = 50;
         COORD.X[0] = 40;
         COORD.Y[0] = 12;
+        face = ' ';
     }
 
     ~worm() {    }
