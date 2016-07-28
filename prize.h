@@ -9,23 +9,18 @@ class prize
     time_t          lifeTime;
     static int      count;
 public:
-    prize()
+    prize(): x ( rand() % 78), y ( rand() % 23), color (rand() % 15)
     {
-        srand((unsigned int) time(NULL));                            // -------------------------------------
-        rand();
-        x = rand() % 78;
-        y = rand() % 23;
-        color = rand() % 15;
         lifeTime = GetTickCount();
         face = ' ';
         state = true;
         count++;
+        /*cout << x << "x\n" << y;
+        _getch();*/
     }
 
     ~prize()
     {
-        lifeTime = (GetTickCount() - lifeTime) / 1000;
-        cout << lifeTime;
     }
 
     void showPrize()

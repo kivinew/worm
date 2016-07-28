@@ -14,7 +14,6 @@ int  wormShow();
 
 prize box[10];
 worm &WORM = worm::getWorm();
-
 int main()
 {
     SetCursorPos(600, 0);
@@ -23,13 +22,14 @@ int main()
     return EXIT_DEBUG_EVENT;
 }
 // новая игра
-void newGame()                                                                  // новая игра
+void newGame()
 {
     gotoXY(0, 0, White);                                                        // установим цвет фона белым
     int quiteCode = 0;                                                          // переменная-признак
+    system("cls");
     do
     {
-        system("cls");
+        WORM.sizeChange(3);
         for each(prize nextBox in box)
         {
             nextBox.showPrize();
@@ -47,8 +47,8 @@ int crawling()
     {                                                                           //                                  |
         while (!_kbhit())                                                       //                                  |
         {                                                                       //                                  |
-            int resultCode = wormShow();                                        //  ОСНОВНОЙ                        |
-            if (resultCode != CONTINUE_CODE) return resultCode;                 //  РАБОЧИЙ ЦИКЛ                    |
+            int resultCode = wormShow();                                        //                       ОСНОВНОЙ   |
+            if (resultCode != CONTINUE_CODE) return resultCode;                 //                     РАБОЧИЙ ЦИКЛ |
         }                                                                       //                                  |
         char pressedKey = _getch();                                             //                                  |
         switch (pressedKey)                                                     //                                  |
@@ -61,27 +61,27 @@ int crawling()
             return RESTART_CODE;                                                //                                  |
             break;                                                              //                                  |
         case LEFT_KEY:                                                          //                                  |
-            if (WORM.getDirection() != right_dir)                                // Если не двигаемся вправо,        |
+            if (WORM.getDirection() != right_dir)                               // Если не двигаемся вправо,        |
             {                                                                   //                                  |
-                WORM.setDirection(left_dir);                                    // смещение по оси Х влево.         |
+                WORM.setDirection(left_dir);                                    // то двигаемся влево.              |
             }                                                                   //                                  |
             break;                                                              //                                  |
         case RIGHT_KEY:                                                         //                                  |
-            if (WORM.getDirection() != left_dir)                               // Если не двигаемся влево,         |
+            if (WORM.getDirection() != left_dir)                                // Если не двигаемся влево,         |
             {                                                                   //                                  |
-                WORM.setDirection(right_dir);                                   // смещение по оси Х влево.         |
+                WORM.setDirection(right_dir);                                   // то двигаемся вправо.             |
             }                                                                   //                                  |
             break;                                                              //                                  |
         case UP_KEY:                                                            //                                  |
-            if (WORM.getDirection() != down_dir)                                  // Если не двигаемся влево,         |
+            if (WORM.getDirection() != down_dir)                                // Если не двигаемся вниз,          |
             {                                                                   //                                  |
-                WORM.setDirection(up_dir);                                      // смещение по оси Х влево.         |
+                WORM.setDirection(up_dir);                                      // то двигаемся вниз.               |
             }                                                                   //                                  |
             break;                                                              //                                  |
         case DOWN_KEY:                                                          //                                  |
-            if (WORM.getDirection() != up_dir)                                // Если не двигаемся влево,         |
+            if (WORM.getDirection() != up_dir)                                  // Если не двигаемся вверх,         |
             {                                                                   //                                  |
-                WORM.setDirection(down_dir);                                    // смещение по оси Х влево.         |
+                WORM.setDirection(down_dir);                                    // то двигаемся вверх.              |
             }                                                                   //                                  |
             break;                                                              //                                  |
         }                                                                       //                                  |
@@ -91,7 +91,6 @@ int crawling()
 // вывод тела червя ...
 int wormShow()                                           
 {
-    WORM.move(box);
     WORM.show();                                                                // вывод червя
-    return CONTINUE_CODE;
+    return WORM.move(box);
 }
