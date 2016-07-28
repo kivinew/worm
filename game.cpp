@@ -1,6 +1,6 @@
-﻿///    "Червяк". По экрану движется червяк, направление движения головы которого
-///    можно менять (стрелками). Червяк ест призы и растет. Задача - при движении
-///    головы не наткнуться на хвост и границы экрана.
+﻿//    "Червяк". По экрану движется червяк, направление движения головы которого
+//    можно менять (стрелками). Червяк ест призы и растет. Задача - при движении
+//    головы не наткнуться на хвост и границы экрана.
 
 #include "header.h"
 #include "prize.h"
@@ -10,7 +10,6 @@ using namespace std;
 
 void newGame();                                                                 // новая игра
 int  crawling();                                                                // управление процессом игры
-int  wormShow();
 
 prize box[10];
 worm &WORM = worm::getWorm();
@@ -29,7 +28,7 @@ void newGame()
     system("cls");
     do
     {
-        WORM.sizeChange(3);
+        WORM.sizeChange(0);                                                     // 0 - сброс размера червя
         for each(prize nextBox in box)
         {
             nextBox.showPrize();
@@ -47,7 +46,8 @@ int crawling()
     {                                                                           //                                  |
         while (!_kbhit())                                                       //                                  |
         {                                                                       //                                  |
-            int resultCode = wormShow();                                        //                       ОСНОВНОЙ   |
+            WORM.show();                                                        // вывод червя
+            int resultCode = WORM.move(box);                                    //                       ОСНОВНОЙ   |
             if (resultCode != CONTINUE_CODE) return resultCode;                 //                     РАБОЧИЙ ЦИКЛ |
         }                                                                       //                                  |
         char pressedKey = _getch();                                             //                                  |
@@ -75,22 +75,22 @@ int crawling()
         case UP_KEY:                                                            //                                  |
             if (WORM.getDirection() != down_dir)                                // Если не двигаемся вниз,          |
             {                                                                   //                                  |
-                WORM.setDirection(up_dir);                                      // то двигаемся вниз.               |
+                WORM.setDirection(up_dir);                                      // то двигаемся вверх.              |
             }                                                                   //                                  |
             break;                                                              //                                  |
         case DOWN_KEY:                                                          //                                  |
             if (WORM.getDirection() != up_dir)                                  // Если не двигаемся вверх,         |
             {                                                                   //                                  |
-                WORM.setDirection(down_dir);                                    // то двигаемся вверх.              |
+                WORM.setDirection(down_dir);                                    // то двигаемся вниз.               |
             }                                                                   //                                  |
+            break;                                                              //                                  |
+        case '+':                                                               //                                  |
+            WORM.speedUp(1);                                                    //                                  |
+            break;                                                              //                                  |
+        case '-':                                                               //                                  |
+            WORM.speedUp(-1);                                                   //                                  |
             break;                                                              //                                  |
         }                                                                       //                                  |
     } while (TRUE);                                                             // бесконечный цикл ________________|
     return EXIT_DEBUG_EVENT;
-}
-// вывод тела червя ...
-int wormShow()                                           
-{
-    WORM.show();                                                                // вывод червя
-    return WORM.move(box);
 }

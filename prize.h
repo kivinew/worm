@@ -15,13 +15,9 @@ public:
         face = ' ';
         state = true;
         count++;
-        /*cout << x << "x\n" << y;
-        _getch();*/
     }
 
-    ~prize()
-    {
-    }
+    ~prize() {    }
 
     void showPrize()
     {

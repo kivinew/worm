@@ -5,14 +5,14 @@ using namespace std;
 class worm
 {
 private:
-    int size,
-        life,
-        direction,
-        color;                                                              // направление движения;
-    struct coordinates  
-    {
-        int X[40], Y[40];
-    }COORD;                                                                 // структура массивов координат 40 элементов червя
+    int size,                                                               // размер червя
+        life,                                                               // количество жизней червя
+        direction,                                                          // направление движения червя
+        color,                                                              // цвет червя
+        speed;                                                              // скорость червя
+    struct coordinates                                                      // структура массивов координат 40 элементов червя
+    {int X[40], Y[40];
+    }COORD;
 
 public:
     static worm& getWorm()
@@ -28,8 +28,10 @@ public:
 
     void sizeChange(int change)
     {
-        size += change;
-        
+        if (change == 0)
+            size = 3;
+        else 
+            size += change;
         return;
     }
 
@@ -85,24 +87,27 @@ public:
         {
             COORD.X[0] = 40;
             COORD.Y[0] = 12;
+            size = 3;
+            life--;
+            if (life < 1) return EXIT_SUCCESS;
             return RESTART_CODE;
         }
         // проверяем координаты головы на выход за пределы поля
         if (headX < 1 || headX > 78 || headY < 1 || headY > 23)
         {
-            sizeChange(-1);                                                 // уменьшаем длину тела червяка.
+            size--;                                                         // уменьшаем длину тела червяка.
             color = LightRed;
             return CONTINUE_CODE;
         }
         // проверка на столкновение головы с другими элементами его тела
-        for (int i = 4; i < getLenght() - 1; i++)
-        {                                                                   //  -1 чтобы не сталкиваться с невидимой частью хвоста
+        for (int i = 3; i < size; i++)                                      // 3 - чтобы не сталкиваться с головной частью тела
+        {                                        
             if (headX == COORD.X[i])                                        // если координата Х совпала -
             {                                                               // проверяем
                 if (headY == COORD.Y[i])                                    // координату У, если она
                 {                                                           // тоже совпала, то ...
                     color = LightRed;                                       // затираем червяка белым цветом ...
-                    sizeChange(-3);                                         // уменьшаем длину тела и ...
+                    size -= 3;                                              // уменьшаем длину тела и ...
                 }
             }
         }
@@ -113,18 +118,18 @@ public:
             {
                 if (headY == box[i].y)                                      //
                 {                                                           //
-                    sizeChange(1);                                          //
+                    size++;                                                 //
                     color = LightBlue;
                     if (size > 40)
                     {
                         life++;
+                        speed += 10;
                         size = 3;
                     }
                 }
             }
         }
-
-        for (int i = size - 1; i > 0; i--)                                  /* сдвигаем элементы массива на один вправо         */
+        for (int i = size; i > 0; i--)                                      /* сдвигаем элементы массива на один вправо         */
         {                                                                   /*                                                  */
             COORD.X[i] = COORD.X[i - 1];                                    /*                                                  */
             COORD.Y[i] = COORD.Y[i - 1];                                    /*                                                  */
@@ -134,6 +139,12 @@ public:
         return CONTINUE_CODE;
     }
 
+    void speedUp(int time)
+    {
+        speed -= time;
+        return;
+    }
+
     void show()                                                             // вывод червя
     {
         for (int i = 0; i < size; i++)
@@ -141,7 +152,7 @@ public:
             gotoXY(COORD.X[i], COORD.Y[i], color);
             cout << " ";
         }
-        Sleep(40);                                                          // задержка
+        Sleep(speed);                                                       // задержка
         for (int i = 0; i < size; i++)
         {
             gotoXY(COORD.X[i], COORD.Y[i], White);
@@ -153,9 +164,11 @@ public:
 private:
     worm()
     {
-        size = 3;
+        life = 3;
+        size = 0;
         color = LightBlue;
         direction = right_dir;
+        speed = 40;
         COORD.X[0] = 40;
         COORD.Y[0] = 12;
     }
