@@ -25,15 +25,17 @@ void newGame()
 {
     gotoXY(0, 0, White);                                                        // установим цвет фона белым
     int quiteCode = 0;                                                          // переменная-признак
+
     do
     {
         system("cls");
-        WORM.sizeChange(RESET_VALUE);                                           // сброс размера червя
-        WORM.speedUp(RESET_VALUE);                                              // сброс скорости червя
         for each(prize nextBox in box)
         {
             nextBox.showPrize();
         }
+        WORM.sizeChange(RESET_VALUE);                                           // сброс размера червя
+        WORM.speedUp(RESET_VALUE);                                              // сброс скорости червя
+
         quiteCode = crawling();                                                 // crawling() возвращает код выхода RESTART_CODE или EXIT_SUCCESS
                                                                                 // в переменную-признак.
         if (quiteCode == EXIT_SUCCESS) return;                                  // выход из игры

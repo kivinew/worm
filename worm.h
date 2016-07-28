@@ -108,10 +108,26 @@ public:
         // проверка координат головы на совпадение с координатами призов
         for (int i = 0; i < prize::getCount(); i++)
         {
+            prize *newBox;
+            newBox = &box[i];
+            bool prizeState = newBox->getState();
+            if (!prizeState)
+            {
+                gotoXY(newBox->x, newBox->y, White);
+                cout << ' ';
+                newBox->x = rand() % 78;
+                newBox->y = rand() % 23;
+                newBox->birth = GetTickCount();
+                newBox->lifeTime = rand() % 50;
+                gotoXY(newBox->x, newBox->y, newBox->color);
+                cout << ' ';
+                //continue;
+            }
             if (headX == box[i].x)
             {
                 if (headY == box[i].y)                                      //
                 {                                                           //
+                    
                     color = box[i].color;
                     levelUp();
                 }

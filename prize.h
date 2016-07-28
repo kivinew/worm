@@ -6,12 +6,13 @@ class prize
     int             x, y, color;
     char            face;
     bool            state;
+    time_t          birth;
     time_t          lifeTime;
     static int      count;
 public:
-    prize(): x ( rand() % 78), y ( rand() % 23), color (rand() % 15)
+    prize(): x ( rand() % 78), y ( rand() % 23), color (rand() % 15), lifeTime ( (time_t) rand() % 50 )
     {
-        lifeTime = GetTickCount();
+        birth = GetTickCount();
         face = ' ';
         state = true;
         count++;
@@ -33,17 +34,17 @@ public:
     // установить активность приза
     void setState(bool change)
     {
-        if (GetTickCount() - lifeTime > 1000)
-            state = false;
-        else
-            state = true;
         if (change) state = true;
         else state = false;
         return;
     }
     // активность приза
-    int getState()
+    bool getState()
     {
+        if ((GetTickCount() - birth)/1000 > lifeTime)
+            state = false;
+        else
+            state = true;
         return state;
     }
     // количество призов
