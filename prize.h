@@ -18,32 +18,35 @@ public:
     }
 
     ~prize() {    }
-
+    // вывод приза
     void showPrize()
     {
         gotoXY(x, y, color);
         cout << face;
         return;
     }
-
+    // цвет приза
     int getColor()
     {
         return color;
     }
-
-    void setState()
+    // установить активность приза
+    void setState(bool change)
     {
         if (GetTickCount() - lifeTime > 1000)
-            state = 0;
+            state = false;
         else
-            state = 1;
+            state = true;
+        if (change) state = true;
+        else state = false;
+        return;
     }
-
+    // активность приза
     int getState()
     {
         return state;
     }
-
+    // количество призов
     static int getCount()
     {
         return count;

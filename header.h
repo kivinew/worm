@@ -8,6 +8,8 @@
 #define MYLIBS_H_INCLUDED
 #define ESC                 27
 #define ENTER               13
+#define RESET_VALUE         0                                                   // сброс значения 
+#define DEFAULT_SPEED       30                                                  // задержка по умолчанию
 #define LEFT_KEY            75
 #define RIGHT_KEY           77
 #define UP_KEY              72

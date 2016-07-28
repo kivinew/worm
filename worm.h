@@ -20,47 +20,42 @@ public:
         static worm newWorm;
         return newWorm;
     }
-
+    // размер червя
     int getLenght()
     {
         return size;
     }
-
+    // изменить размер червя
     void sizeChange(int change)
     {
-        if (change == 0)
+        if (change == RESET_VALUE)
             size = 3;
         else 
             size += change;
         return;
     }
-
+    // установить направление
     void setDirection(int dir)
     {
         direction = dir;
         return;
     }
-
+    // направление
     int getDirection()
     {
         return direction;
     }
-
+    // значение задержки
+    int getSpeed()
+    {
+        return speed;
+    }
+    // установить цвет червя
     void setColor(int newColor)
     {
         color = newColor;
     }
-
-    int getX()
-    {
-        return COORD.X[0];
-    }
-
-    int getY()
-    {
-        return COORD.Y[0];
-    }
-
+    // движение червя
     int move(prize *box)
     {
         int dX = 0, dY = 0,
@@ -118,14 +113,7 @@ public:
             {
                 if (headY == box[i].y)                                      //
                 {                                                           //
-                    size++;                                                 //
-                    color = LightBlue;
-                    if (size > 40)
-                    {
-                        life++;
-                        speed += 10;
-                        size = 3;
-                    }
+                    levelUp();
                 }
             }
         }
@@ -134,30 +122,47 @@ public:
             COORD.X[i] = COORD.X[i - 1];                                    /*                                                  */
             COORD.Y[i] = COORD.Y[i - 1];                                    /*                                                  */
         }
-        COORD.X[0] = headX;
-        COORD.Y[0] = headY;
+        COORD.X[0] = headX;                                                 // присваиваем новые значения
+        COORD.Y[0] = headY;                                                 // координат головы
         return CONTINUE_CODE;
     }
-
-    void speedUp(int time)
+    
+    // изменение скорости
+    void speedUp(int speedChange)
     {
-        speed -= time;
+        if (speedChange == RESET_VALUE) speed = DEFAULT_SPEED;              // сброс скорости
+        else speed -= speedChange;
         return;
     }
-
-    void show()                                                             // вывод червя
+    
+    // червь растёт и ускоряется
+    void levelUp()
     {
-        for (int i = 0; i < size; i++)
+        size++;                                                             //
+        color = LightBlue;
+        speed--;
+        if (size > 40)
+        {
+            life++;
+            speed -= 10;
+            size = 3 + life;                                                // 
+        }
+        return;
+    }
+    
+    // вывод червя
+    void show()
+    {
+        int i;
+        gotoXY(COORD.X[0], COORD.Y[0], Black);                              // голова
+        cout << " ";
+        for (i = 1; i < size; i++)
         {
             gotoXY(COORD.X[i], COORD.Y[i], color);
             cout << " ";
         }
-        Sleep(speed);                                                       // задержка
-        for (int i = 0; i < size; i++)
-        {
-            gotoXY(COORD.X[i], COORD.Y[i], White);
-            cout << " ";
-        }
+        gotoXY(COORD.X[i], COORD.Y[i], White);                              // затираем след за червём
+        cout << " ";
         return;
     }
 
@@ -168,7 +173,7 @@ private:
         size = 0;
         color = LightBlue;
         direction = right_dir;
-        speed = 40;
+        speed = 50;
         COORD.X[0] = 40;
         COORD.Y[0] = 12;
     }

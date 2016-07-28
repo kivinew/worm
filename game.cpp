@@ -25,10 +25,11 @@ void newGame()
 {
     gotoXY(0, 0, White);                                                        // установим цвет фона белым
     int quiteCode = 0;                                                          // переменная-признак
-    system("cls");
     do
     {
-        WORM.sizeChange(0);                                                     // 0 - сброс размера червя
+        system("cls");
+        WORM.sizeChange(RESET_VALUE);                                           // сброс размера червя
+        WORM.speedUp(RESET_VALUE);                                              // сброс скорости червя
         for each(prize nextBox in box)
         {
             nextBox.showPrize();
@@ -44,11 +45,12 @@ int crawling()
 {
     do                                                                          // бесконечный цикл ________________
     {                                                                           //                                  |
-        while (!_kbhit())                                                       //                                  |
-        {                                                                       //                                  |
-            WORM.show();                                                        // вывод червя
-            int resultCode = WORM.move(box);                                    //                       ОСНОВНОЙ   |
-            if (resultCode != CONTINUE_CODE) return resultCode;                 //                     РАБОЧИЙ ЦИКЛ |
+        while (!_kbhit())                                                       //                       ОСНОВНОЙ   |
+        {                                                                       //                        РАБОЧИЙ   |
+            WORM.show();                                                        // вывод червя                      |
+            int resultCode = WORM.move(box);                                    //                                  |
+            Sleep(WORM.getSpeed());                                             // задержка отображения червя       |
+            if (resultCode != CONTINUE_CODE) return resultCode;                 //                           ЦИКЛ   |
         }                                                                       //                                  |
         char pressedKey = _getch();                                             //                                  |
         switch (pressedKey)                                                     //                                  |
