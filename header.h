@@ -10,6 +10,8 @@
 #define ENTER               13
 #define RESET_VALUE         0                                                   // сброс значения 
 #define DEFAULT_SPEED       60                                                  // задержка по умолчанию
+#define SPEED               1
+#define SIZE                2
 #define LEFT_KEY            75
 #define RIGHT_KEY           77
 #define UP_KEY              72

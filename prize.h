@@ -8,14 +8,20 @@ class prize
     bool            state;
     time_t          birth;
     time_t          lifeTime;
+    bool            tempEffect;
     static int      count;
 public:
-    prize(): x(rand() % 77 + 1), y(rand() % 22 + 1), color(rand() % 15), lifeTime((time_t) rand() % 50)
+    prize(): x(rand() % 77 + 1), y(rand() % 22 + 1), color(rand() % 15)
     {
+        if (color == LightRed)
+            lifeTime = (time_t) rand() % 3 + 8;
+        if (color == Green)
+            lifeTime = (time_t) rand() % 3 + 1;
         birth = GetTickCount();
         face = ' ';
         state = true;
         count++;
+        _getch();
     }
 
     ~prize() {    }
@@ -34,8 +40,7 @@ public:
     // установить активность приза
     void setState(bool change)
     {
-        if (change) state = true;
-        else state = false;
+        state = change;
         return;
     }
     // активность приза

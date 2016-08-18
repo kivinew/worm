@@ -11,7 +11,7 @@ using namespace std;
 void newGame();                                                             // новая игра
 int  crawling();                                                            // управление процессом игры
 
-prize box[3];
+prize box[6];
 worm &WORM = worm::getWorm();
 int main()
 {

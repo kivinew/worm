@@ -9,7 +9,8 @@ private:
         life,                                                               // количество жизней червя
         direction,                                                          // направление движения червя
         color,                                                              // цвет червя
-        speed;                                                              // скорость червя
+        speed,                                                              // скорость червя
+        boost;                                                              // временный эффект приза
     char face;                                                              // лицо червя
     struct coordinates                                                      // структура из двух массивов координат 40 элементов червя
     {
@@ -23,7 +24,7 @@ public:
         return newWorm;
     }
     // размер червя
-    int getLenght()
+    int getSize()
     {
         return size;
     }
@@ -103,6 +104,7 @@ public:
                 {                                                           // тоже совпала, то ...
                     color = LightRed;                                       // червь становится красным и ...
                     size -= 3;                                              // уменьшается ...
+                    continue;
                 }
             }
         }
@@ -111,25 +113,42 @@ public:
         {
             prize *newBox;
             newBox = &box[i];
-            bool prizeState = newBox->state;
-            if (!prizeState)
+            if (!newBox->getState())
             {
                 gotoXY(newBox->x, newBox->y, White);
                 cout << ' ';
+                newBox->setState(true);
                 newBox->x = rand() % 77 + 1;
                 newBox->y = rand() % 22 + 1;
                 newBox->birth = GetTickCount();
-                newBox->lifeTime = rand() % 20 + 10;
+                if (!(newBox->color == Green) && !(newBox->color == LightRed))
+                {
+                    newBox->lifeTime = rand() % 3 + 3;
+                }
                 gotoXY(newBox->x, newBox->y, newBox->color);
                 cout << newBox->face;
-                //continue;
             }
             if (headX == box[i].x)
             {
                 if (headY == box[i].y)                                      //
                 {                                                           //
                     color = box[i].color;
-                    newBox->state = false;
+                    if (color == LightRed)
+                    {
+                        size-=2;
+                        speed-=5;
+                    }
+                    if (color == Green)
+                    {
+                        size+=2;
+                        speed+=5;
+                    }
+                    if (newBox->color == Blue || newBox->color == LightBlue)
+                    {
+                        speed -= 10;
+                        boost = SPEED;
+                    }
+                    newBox->setState(false);
                     levelUp();
                 }
             }
@@ -168,19 +187,19 @@ public:
     {
         int i;
         gotoXY(COORD.X[0], COORD.Y[0], LightRed);                           // голова
-        cout << face;
+        cout << face;                                                       //
         for (i = 1; i < size; i++)
         {
-            gotoXY(COORD.X[i], COORD.Y[i], color);
-            cout << " ";
+            gotoXY(COORD.X[i], COORD.Y[i], color);                          // остальная часть тела червя
+            cout << " ";                                                    // 
         }
         gotoXY(COORD.X[i], COORD.Y[i], White);                              // затираем след за червём
-        cout << " ";
+        cout << " ";                                                        // 
         return;
     }
 
 private:
-    worm()
+    worm()                                                                  // конструктор червя
     {
         life = 3;
         size = 0;
@@ -194,7 +213,7 @@ private:
 
     ~worm() {    }
 
-    worm(const worm&) = delete;
-    worm& operator=(const worm&) = delete;
+    worm(const worm&) = delete;                                             // запрет копирования
+    worm& operator=(const worm&) = delete;                                  // запрет присвоения
 };
 
