@@ -10,7 +10,7 @@ class prize
     time_t          lifeTime;
     static int      count;
 public:
-    prize(): x ( rand() % 78), y ( rand() % 23), color (rand() % 15), lifeTime ( (time_t) rand() % 50 )
+    prize(): x(rand() % 77 + 1), y(rand() % 22 + 1), color(rand() % 15), lifeTime((time_t) rand() % 50)
     {
         birth = GetTickCount();
         face = ' ';
@@ -41,7 +41,7 @@ public:
     // активность приза
     bool getState()
     {
-        if ((GetTickCount() - birth)/1000 > lifeTime)
+        if ((GetTickCount() - birth) / 1000 > lifeTime)
             state = false;
         else
             state = true;

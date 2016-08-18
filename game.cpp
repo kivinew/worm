@@ -1,6 +1,6 @@
 ﻿//    "Червяк". По экрану движется червяк, направление движения головы которого
-//    можно менять (стрелками). Червяк ест призы и растет. Задача - при движении
-//    головы не наткнуться на хвост и границы экрана.
+//    можно менять (стрелками). Червяк ест призы, растет и ускоряется. 
+//    Задача - при движении головы не наткнуться на хвост и границы экрана.
 
 #include "header.h"
 #include "prize.h"
@@ -8,10 +8,10 @@
 
 using namespace std;
 
-void newGame();                                                                 // новая игра
-int  crawling();                                                                // управление процессом игры
+void newGame();                                                             // новая игра
+int  crawling();                                                            // управление процессом игры
 
-prize box[10];
+prize box[3];
 worm &WORM = worm::getWorm();
 int main()
 {
@@ -35,7 +35,6 @@ void newGame()
         }
         WORM.sizeChange(RESET_VALUE);                                           // сброс размера червя
         WORM.speedUp(RESET_VALUE);                                              // сброс скорости червя
-
         quiteCode = crawling();                                                 // crawling() возвращает код выхода RESTART_CODE или EXIT_SUCCESS
                                                                                 // в переменную-признак.
         if (quiteCode == EXIT_SUCCESS) return;                                  // выход из игры
@@ -92,7 +91,7 @@ int crawling()
             WORM.speedUp(1);                                                    //                                  |
             break;                                                              //                                  |
         case '-':                                                               //                                  |
-            WORM.speedUp(-1);                                                   //                                  |
+            WORM.speedUp(-2);                                                   //                                  |
             break;                                                              //                                  |
         }                                                                       //                                  |
     } while (TRUE);                                                             // бесконечный цикл ________________|

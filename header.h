@@ -43,14 +43,14 @@ enum Color {
     White = 15
 };
 // перевод курсора в положение X,Y и назначение цвета фона
-void gotoXY     ( int x , int y , int back )
+void gotoXY(int x, int y, int back)
 {
-    HANDLE console = GetStdHandle ( STD_OUTPUT_HANDLE ) ;
-    COORD coord ;
-    coord . X = x ;
-    coord . Y = y ;
-    SetConsoleCursorPosition ( console , coord ) ;                              // позиция курсора
-    SetConsoleTextAttribute ( console , (WORD) ( back << 4 ) ) ;                // цвет фона
+    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(console, coord);                              // позиция курсора
+    SetConsoleTextAttribute(console, (WORD) (back << 4));                // цвет фона
     return;
 }
 #endif

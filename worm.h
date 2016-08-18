@@ -11,8 +11,9 @@ private:
         color,                                                              // цвет червя
         speed;                                                              // скорость червя
     char face;                                                              // лицо червя
-    struct coordinates                                                      // структура массивов координат 40 элементов червя
-    {int X[40], Y[40];
+    struct coordinates                                                      // структура из двух массивов координат 40 элементов червя
+    {
+        int X[40], Y[40];
     }COORD;
 
 public:
@@ -31,7 +32,7 @@ public:
     {
         if (change == RESET_VALUE)
             size = 3;
-        else 
+        else
             size += change;
         return;
     }
@@ -59,8 +60,8 @@ public:
     // движение червя
     int move(prize *box)
     {
-        int dX = 0, dY = 0,
-            headX, headY;
+        int dX = 0, dY = 0,                                                 // сдвиг по осям X и Y
+            headX, headY;                                                   // координаты головы червя
         switch (direction)
         {
         case left_dir:
@@ -94,41 +95,41 @@ public:
             return CONTINUE_CODE;
         }
         // проверка на столкновение головы с другими элементами его тела
-        for (int i = 3; i < size; i++)                                      // 3 - чтобы не сталкиваться с головной частью тела
-        {                                        
+        for (int i = 3; i < size; i++)                                      // 3 - сокращаем цикл проверки на размер головной части червя
+        {
             if (headX == COORD.X[i])                                        // если координата Х совпала -
             {                                                               // проверяем
                 if (headY == COORD.Y[i])                                    // координату У, если она
                 {                                                           // тоже совпала, то ...
-                    color = LightRed;                                       // затираем червяка белым цветом ...
-                    size -= 3;                                              // уменьшаем длину тела и ...
+                    color = LightRed;                                       // червь становится красным и ...
+                    size -= 3;                                              // уменьшается ...
                 }
             }
         }
         // проверка координат головы на совпадение с координатами призов
-        for (int i = 0; i < prize::getCount(); i++)
+        for (int i = 0; i < prize::count; i++)
         {
             prize *newBox;
             newBox = &box[i];
-            bool prizeState = newBox->getState();
+            bool prizeState = newBox->state;
             if (!prizeState)
             {
                 gotoXY(newBox->x, newBox->y, White);
                 cout << ' ';
-                newBox->x = rand() % 78;
-                newBox->y = rand() % 23;
+                newBox->x = rand() % 77 + 1;
+                newBox->y = rand() % 22 + 1;
                 newBox->birth = GetTickCount();
-                newBox->lifeTime = rand() % 50;
+                newBox->lifeTime = rand() % 20 + 10;
                 gotoXY(newBox->x, newBox->y, newBox->color);
-                cout << ' ';
+                cout << newBox->face;
                 //continue;
             }
             if (headX == box[i].x)
             {
                 if (headY == box[i].y)                                      //
                 {                                                           //
-                    
                     color = box[i].color;
+                    newBox->state = false;
                     levelUp();
                 }
             }
