@@ -27,32 +27,32 @@
 #define EXIT_DEBUG_EVENT    5                                                   // отладочный код выхода
 // перечисление цветов вывода в консоль
 enum Color {
-    Black = 0,
-    Blue = 1,
-    Green = 2,
-    Cyan = 3,
-    Red = 4,
-    Magenta = 5,
-    Brown = 6,
-    LightGray = 7,
-    DarkGray = 8,
-    LightBlue = 9,
-    LightGreen = 10,
-    LightCyan = 11,
-    LightRed = 12,
-    LightMagenta = 13,
-    Yellow = 14,
-    White = 15
+	Black = 0,
+	Blue = 1,
+	Green = 2,
+	Cyan = 3,
+	Red = 4,
+	Magenta = 5,
+	Brown = 6,
+	LightGray = 7,
+	DarkGray = 8,
+	LightBlue = 9,
+	LightGreen = 10,
+	LightCyan = 11,
+	LightRed = 12,
+	LightMagenta = 13,
+	Yellow = 14,
+	White = 15
 };
 // перевод курсора в положение X,Y и назначение цвета фона
-void gotoXY(int x, int y, int back)
+inline void gotoXY(int x, int y, int back)
 {
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coord;
-    coord.X = x;
-    coord.Y = y;
-    SetConsoleCursorPosition(console, coord);                              // позиция курсора
-    SetConsoleTextAttribute(console, (WORD) (back << 4));                // цвет фона
-    return;
+	auto console = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(console, coord);                              // позиция курсора
+	SetConsoleTextAttribute(console, WORD(back << 4));                // цвет фона
+	return;
 }
 #endif
